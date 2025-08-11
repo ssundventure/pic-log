@@ -1,6 +1,12 @@
-function PhotoCard(){
+function PhotoCard() {
+  return (
+    <div>
+      <input type="file" accept="image/*" />
 
-    return  <div></div>
+      <button>Upload</button>
+
+    </div>
+  );
 }
 
-export default PhotoCard;   
+export default PhotoCard;
