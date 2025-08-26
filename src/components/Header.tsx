@@ -27,7 +27,7 @@ const Sidebar = styled.nav`
   min-height: calc(100vh - ${HEADER_HEIGHT});
   position: fixed;
   gap: 1.5rem;
-  padding: 0.75rem;
+  padding: 3rem 1rem;
   border-right: 1px solid #ccc;
 `;
 
@@ -57,7 +57,7 @@ Header.Sidebar = function HeaderSidebar() {
         <Link to="/">Home</Link>
       </SidebarItem>
       <SidebarItem>
-        <Link to="/write">✍️Write</Link>
+        <Link to="/write">Write</Link>
       </SidebarItem>
     </Sidebar>
   );
