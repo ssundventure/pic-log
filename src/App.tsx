@@ -7,7 +7,6 @@ import Write from "./pages/Write";
 import styled from "styled-components";
 import { HEADER_HEIGHT, SIDEBAR_WIDTH } from "./constants/layout";
 
-
 const MainLayout = styled.div`
   display: flex;
   flex-direction: row;
@@ -15,9 +14,10 @@ const MainLayout = styled.div`
 `;
 
 const MainContent = styled.div`
-  flex: 1;
   margin-top: ${HEADER_HEIGHT};
   margin-left: ${SIDEBAR_WIDTH};
+
+  padding: ${HEADER_HEIGHT};
 `;
 
 function App() {
