@@ -10,7 +10,6 @@ const WriteContainer = styled.div`
   display: flex;
   flex-direction: column;
   gap: 1rem;
-  s
 `;
 
 function Write() {
