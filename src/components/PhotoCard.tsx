@@ -2,6 +2,15 @@ import { useState } from "react";
 import styled from "styled-components";
 
 const ImageDropArea = styled.div<{ $bg?: string }>`
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+
+  width: 375px;
+  height: 574px;
+  margin-right: 3rem;
   border-radius: 25px;
   padding: 10rem 0;
   background-color: #ccc;
@@ -14,20 +23,18 @@ const ImageDropArea = styled.div<{ $bg?: string }>`
     background-position:center;
     color: transparent;
     `}
-  text-align: center;
-  position: relative;
 `;
 
 const Input = styled.input`
-  width: 100%;
-  height: 100%;
   position: absolute;
   top: 0px;
   left: 0px;
-  opacity: 0;
+  width: 100%;
+  height: 100%;
   box-sizing: border-box;
-  cursor: pointer;
+  opacity: 0;
   font-size: 0rem;
+  cursor: pointer;
 `;
 
 function PhotoCard() {

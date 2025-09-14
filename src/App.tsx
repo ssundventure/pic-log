@@ -1,23 +1,16 @@
 import React from "react";
 import GlobalStyle from "./styles/GlobalStyle";
-import Header from "./components/Header";
+import Header from "./components/SideBar";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Home from "./pages/Home";
 import Write from "./pages/Write";
 import styled from "styled-components";
-import { HEADER_HEIGHT, SIDEBAR_WIDTH } from "./constants/layout";
-
-const MainLayout = styled.div`
-  display: flex;
-  flex-direction: row;
-  min-height: 100vh;
-`;
+import { SIDEBAR_WIDTH } from "./constants/layout";
+import SideBar from "./components/SideBar";
 
 const MainContent = styled.div`
-  margin-top: ${HEADER_HEIGHT};
+  padding: 7rem;
   margin-left: ${SIDEBAR_WIDTH};
-
-  padding: ${HEADER_HEIGHT};
 `;
 
 function App() {
@@ -25,16 +18,13 @@ function App() {
     <>
       <GlobalStyle />
       <BrowserRouter>
-        <Header />
-        <MainLayout>
-          <Header.Sidebar />
-          <MainContent>
-            <Routes>
-              <Route path="/" element={<Home />} />
-              <Route path="/write" element={<Write />} />
-            </Routes>
-          </MainContent>
-        </MainLayout>
+        <SideBar />
+        <MainContent>
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/write" element={<Write />} />
+          </Routes>
+        </MainContent>
       </BrowserRouter>
     </>
   );
