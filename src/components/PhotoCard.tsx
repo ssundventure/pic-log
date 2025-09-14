@@ -1,10 +1,19 @@
 import { useState } from "react";
 import styled from "styled-components";
 
-const ImageDropArea = styled.div`
+const ImageDropArea = styled.div<{ $bg?: string }>`
   border-radius: 25px;
   padding: 10rem 0;
   background-color: #ccc;
+
+  ${({ $bg }) =>
+    $bg &&
+    `
+    background-image: url(${$bg});
+    background-size:cover;
+    background-position:center;
+    color: transparent;
+    `}
   text-align: center;
   position: relative;
 `;
@@ -24,24 +33,49 @@ const Input = styled.input`
 function PhotoCard() {
   const [image, setImage] = useState<string>("");
   const [text, setText] = useState<string>("");
+
+  const readImageFile = (file: File) => {
+    if (!file) return;
+    if (!file.type.startsWith("image/")) {
+      alert("이미지 파일만 업로드 가능합니다.");
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      setImage(reader.result as string);
+    };
+    reader.readAsDataURL(file);
+  };
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    console.log(file);
+    readImageFile(file);
+
+    e.currentTarget.value = ""; // 같은 파일 재선택 가능
+  };
+
+  const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+  };
+
+  const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    const file = e.dataTransfer.files[0];
+    readImageFile(file);
+  };
   return (
     <>
       <ImageDropArea
-        onDragOver={(e: React.DragEvent<HTMLDivElement>) => {
-          e.preventDefault();
-          console.log(e + "onDragOver");
-        }}
-        onDrop={(e: React.DragEvent<HTMLDivElement>) => {
-          e.preventDefault();
-          console.log(e + "onDrop");
-        }}
+        $bg={image || undefined}
+        onDragOver={handleDragOver}
+        onDrop={handleDrop}
       >
         파일을 선택하거나 <br /> 여기로 끌어다놓으세요.
-        <Input type="file" accept="image/*" />
+        <Input type="file" onChange={handleFileChange} accept="image/*" />
       </ImageDropArea>
-      <img src={image} alt="Uploaded" />
-
-      <button>Upload</button>
     </>
   );
 }
