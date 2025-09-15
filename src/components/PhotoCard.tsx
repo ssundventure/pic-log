@@ -4,6 +4,7 @@ import styled from "styled-components";
 const ImageDropArea = styled.div<{ $bg?: string }>`
   position: relative;
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
   text-align: center;
@@ -58,7 +59,6 @@ function PhotoCard() {
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
-    console.log(file);
     readImageFile(file);
 
     e.currentTarget.value = ""; // 같은 파일 재선택 가능
@@ -80,7 +80,27 @@ function PhotoCard() {
         onDragOver={handleDragOver}
         onDrop={handleDrop}
       >
-        파일을 선택하거나 <br /> 여기로 끌어다놓으세요.
+        <svg
+          width="8rem"
+          data-slot="icon"
+          fill="none"
+          stroke-width="1.5"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+          xmlns="http://www.w3.org/2000/svg"
+          aria-hidden="true"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m6.75 12-3-3m0 0-3 3m3-3v6m-1.5-15H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z"
+          ></path>
+        </svg>
+        <p>
+          파일을 선택하거나 <br />
+          여기로 끌어다놓으세요. <br />
+          (클릭 업로드 / Drag & Drop){" "}
+        </p>
         <Input type="file" onChange={handleFileChange} accept="image/*" />
       </ImageDropArea>
     </>

@@ -12,12 +12,37 @@ const WriteContainer = styled.div`
   gap: 1rem;
 `;
 
+const Input = styled.input`
+  padding: 1rem;
+  width: 100%;
+  height: 3rem;
+  border-radius: 10px;
+`;
+
+const TextArea = styled.textarea`
+  padding: 1rem;
+  width: 100%;
+  height: 7rem;
+  border-radius: 10px;
+`;
+
+const Label = styled.label`
+  display: block;
+  margin-bottom: 1rem;
+`;
+
 function Write() {
   const [title, setTitle] = useState("");
+  const [overlayText, setOverlayText] = useState("");
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
     setTitle(e.target.value);
+  };
+
+  const handleOverlayTextChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    e.preventDefault();
+    setOverlayText(e.target.value);
   };
 
   return (
@@ -29,18 +54,31 @@ function Write() {
 
       <WriteContainer>
         <div>
-          <label htmlFor="title">Title : </label>
-          <input
+          <Label htmlFor="title">Title</Label>
+          <Input
             type="text"
-            onChange={handleChange}
+            value={title}
+            onChange={handleTitleChange}
             placeholder="제목을 입력하세요"
           />
         </div>
-        <textarea
-          placeholder="여기에 글을 작성하세요..."
-          rows={10}
-          cols={50}
-        ></textarea>
+        <div>
+          <Label htmlFor="overlayText">OverlayText</Label>
+          <Input
+            type="text"
+            value={overlayText}
+            onChange={handleOverlayTextChange}
+            placeholder="사진에 쓸 텍스트를 입력하세요."
+          />
+        </div>
+        <div>
+          <Label>Description</Label>
+          <TextArea
+            placeholder="여기에 글을 작성하세요..."
+            rows={10}
+            cols={50}
+          ></TextArea>
+        </div>
         <button type="submit">저장</button>
       </WriteContainer>
     </MainContainer>
