@@ -26,6 +26,23 @@ const ImageDropArea = styled.div<{ $bg?: string }>`
     `}
 `;
 
+const Overlay = styled.textarea`
+  position: absolute;
+  left: 12px;
+  right: 12px;
+  bottom: 12px;
+  min-height: 72px;
+  padding: 10px 12px;
+  border-radius: 12px;
+  border: 1px solid #e6e2da;
+  background: rgba(255,255,255,.55);
+  line-height: 1.4;
+  resize: none;
+  outline: none;
+  z-index: 2; /* 인풋보다 위로 */
+  @supports (backdrop-filter: blur(6px)) { backdrop-filter: blur(6px); }
+`;
+
 const Input = styled.input`
   position: absolute;
   top: 0px;
@@ -101,6 +118,9 @@ function PhotoCard() {
           여기로 끌어다놓으세요. <br />
           (클릭 업로드 / Drag & Drop){" "}
         </p>
+        {image && (
+          <Overlay value={text} onChange={(e)=> setText(e.target.value)} placeholder="여기에 글을 적어봐요." />
+        )}
         <Input type="file" onChange={handleFileChange} accept="image/*" />
       </ImageDropArea>
     </>
