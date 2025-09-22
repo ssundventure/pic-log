@@ -48,7 +48,7 @@ function Write() {
   return (
     <MainContainer>
       <div>
-        <PhotoCard />
+        <PhotoCard overlayText={overlayText} />
         <p>사진을 업로드하고 글을 작성해보세요!</p>
       </div>
 

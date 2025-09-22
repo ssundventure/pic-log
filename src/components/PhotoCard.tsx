@@ -35,12 +35,14 @@ const Overlay = styled.textarea`
   padding: 10px 12px;
   border-radius: 12px;
   border: 1px solid #e6e2da;
-  background: rgba(255,255,255,.55);
+  background: rgba(255, 255, 255, 0.55);
   line-height: 1.4;
   resize: none;
   outline: none;
   z-index: 2; /* 인풋보다 위로 */
-  @supports (backdrop-filter: blur(6px)) { backdrop-filter: blur(6px); }
+  @supports (backdrop-filter: blur(6px)) {
+    backdrop-filter: blur(6px);
+  }
 `;
 
 const Input = styled.input`
@@ -55,9 +57,8 @@ const Input = styled.input`
   cursor: pointer;
 `;
 
-function PhotoCard() {
+function PhotoCard({ overlayText }: { overlayText: string }) {
   const [image, setImage] = useState<string>("");
-  const [text, setText] = useState<string>("");
 
   const readImageFile = (file: File) => {
     if (!file) return;
@@ -119,7 +120,10 @@ function PhotoCard() {
           (클릭 업로드 / Drag & Drop){" "}
         </p>
         {image && (
-          <Overlay value={text} onChange={(e)=> setText(e.target.value)} placeholder="여기에 글을 적어봐요." />
+          <Overlay
+            value={overlayText}
+            placeholder="여기에 글을 적어봐요."
+          />
         )}
         <Input type="file" onChange={handleFileChange} accept="image/*" />
       </ImageDropArea>
