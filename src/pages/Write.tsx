@@ -31,9 +31,12 @@ const Label = styled.label`
   margin-bottom: 1rem;
 `;
 
+type TextStyleType = "plain" | "subtitle" | "speech";
+
 function Write() {
   const [title, setTitle] = useState("");
   const [overlayText, setOverlayText] = useState("");
+  const [textStyle, setTextStyle] = useState<TextStyleType>("plain");
 
   const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
@@ -70,6 +73,41 @@ function Write() {
             onChange={handleOverlayTextChange}
             placeholder="사진에 쓸 텍스트를 입력하세요."
           />
+        </div>
+        <div>
+          <Label htmlFor="">Select Style</Label>
+          <fieldset>
+            <div>
+              <input
+                type="radio"
+                name="textStyle"
+                value="plain"
+                checked={textStyle === "plain"}
+                onChange={(e) => setTextStyle(e.target.value as TextStyleType)}
+              />
+              <label htmlFor="plain">기본</label>
+            </div>
+            <div>
+              <input
+                type="radio"
+                name="textStyle"
+                value="subtitle"
+                checked={textStyle === "subtitle"}
+                onChange={(e) => setTextStyle(e.target.value as TextStyleType)}
+              />
+              <label htmlFor="subtitle">자막</label>
+            </div>
+            <div>
+              <input
+                type="radio"
+                name="textStyle"
+                value="speech"
+                checked={textStyle === "speech"}
+                onChange={(e) => setTextStyle(e.target.value as TextStyleType)}
+              />
+              <label htmlFor="speech">말풍선</label>
+            </div>
+          </fieldset>
         </div>
         <div>
           <Label>Description</Label>
