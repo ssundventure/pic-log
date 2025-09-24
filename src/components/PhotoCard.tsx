@@ -26,22 +26,76 @@ const ImageDropArea = styled.div<{ $bg?: string }>`
     `}
 `;
 
-const Overlay = styled.textarea`
+const PlainStyle = styled.div`
   position: absolute;
   left: 12px;
   right: 12px;
   bottom: 12px;
-  min-height: 72px;
-  padding: 10px 12px;
+  min-height: 36px;
+  padding: 8px 12px;
   border-radius: 12px;
   border: 1px solid #e6e2da;
-  background: rgba(255, 255, 255, 0.55);
-  line-height: 1.4;
+  background-color: rgba(255, 255, 255, 0.55);
+  color: black;
   resize: none;
   outline: none;
   z-index: 2; /* 인풋보다 위로 */
   @supports (backdrop-filter: blur(6px)) {
     backdrop-filter: blur(6px);
+  }
+`;
+
+const SubtitleStyle = styled.div`
+  position: absolute;
+  left: 12px;
+  right: 12px;
+  bottom: 12px;
+  min-height: 36px;
+  padding: 8px 12px;
+  border-radius: 0px;
+  background-color: rgba(0, 0, 0, 0.85);
+  color: yellow;
+  resize: none;
+  outline: none;
+  z-index: 2; /* 인풋보다 위로 */
+`;
+
+const SpeechStyle = styled.div`
+  position: relative;
+  background: #fff;
+  border: 2px solid #333;
+  border-radius: 12px;
+  padding: 10px 15px;
+  color: #333;
+  font-size: 1rem;
+  max-width: 80%;
+
+  &::after {
+    content: "";
+    position: absolute;
+    bottom: -10px;
+    left: 30px;
+    width: 0;
+    height: 0;
+    border: 8px solid transparent;
+    border-top-color: #fff;
+    border-bottom: 0;
+    margin-left: -8px;
+    margin-top: -8px;
+  }
+
+  &::before {
+    content: "";
+    position: absolute;
+    bottom: -12px;
+    left: 30px;
+    width: 0;
+    height: 0;
+    border: 10px solid transparent;
+    border-top-color: #333;
+    border-bottom: 0;
+    margin-left: -10px;
+    margin-top: -10px;
   }
 `;
 
@@ -57,7 +111,12 @@ const Input = styled.input`
   cursor: pointer;
 `;
 
-function PhotoCard({ overlayText }: { overlayText: string }) {
+interface PhotoCardProps {
+  overlayText: string;
+  textStyle: string;
+}
+
+function PhotoCard({ overlayText, textStyle }: PhotoCardProps) {
   const [image, setImage] = useState<string>("");
 
   const readImageFile = (file: File) => {
@@ -119,12 +178,16 @@ function PhotoCard({ overlayText }: { overlayText: string }) {
           여기로 끌어다놓으세요. <br />
           (클릭 업로드 / Drag & Drop){" "}
         </p>
-        {image && (
-          <Overlay
-            value={overlayText}
-            placeholder="여기에 글을 적어봐요."
-          />
+        {image && textStyle === "plain" && (
+          <PlainStyle>{overlayText}</PlainStyle>
         )}
+        {image && textStyle === "subtitle" && (
+          <SubtitleStyle>{overlayText}</SubtitleStyle>
+        )}
+        {image && textStyle === "speech" && (
+          <SpeechStyle>{overlayText}</SpeechStyle>
+        )}
+
         <Input type="file" onChange={handleFileChange} accept="image/*" />
       </ImageDropArea>
     </>
