@@ -1,6 +1,7 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import PhotoCard from "../components/PhotoCard";
 import styled from "styled-components";
+import html2canvas from "html2canvas";
 
 const MainContainer = styled.div`
   display: flex;
@@ -37,6 +38,8 @@ function Write() {
   const [title, setTitle] = useState("");
   const [overlayText, setOverlayText] = useState("");
   const [textStyle, setTextStyle] = useState<TextStyleType>("plain");
+  const photoCardRef = useRef<HTMLDivElement>(null);
+  const [capturedImage, setCapturedImage] = useState<string | null>(null);
 
   const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
@@ -48,10 +51,27 @@ function Write() {
     setOverlayText(e.target.value);
   };
 
+  const handleSubmit = async () => {
+    if (!photoCardRef.current) return;
+
+    const canvas = await html2canvas(photoCardRef.current, {
+      useCORS: true,
+      backgroundColor: null,
+    });
+
+    const dataUrl = canvas.toDataURL("image/png");
+    setCapturedImage(dataUrl);
+    console.log(dataUrl);
+  };
+
   return (
     <MainContainer>
       <div>
-        <PhotoCard overlayText={overlayText} textStyle={textStyle} />
+        <PhotoCard
+          overlayText={overlayText}
+          textStyle={textStyle}
+          ref={photoCardRef}
+        />
         <p>사진을 업로드하고 글을 작성해보세요!</p>
       </div>
 
@@ -117,8 +137,20 @@ function Write() {
             cols={50}
           ></TextArea>
         </div>
-        <button type="submit">저장</button>
+        <button type="submit" onClick={handleSubmit}>
+          저장
+        </button>
       </WriteContainer>
+      {capturedImage && (
+        <div>
+          <h3>📸 캡처된 이미지 미리보기</h3>
+          <img
+            src={capturedImage}
+            alt="캡처 결과"
+            style={{ maxWidth: "100%", border: "1px solid #ccc" }}
+          />
+        </div>
+      )}
     </MainContainer>
   );
 }

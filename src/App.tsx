@@ -1,6 +1,5 @@
 import React from "react";
 import GlobalStyle from "./styles/GlobalStyle";
-import Header from "./components/SideBar";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Home from "./pages/Home";
 import Write from "./pages/Write";
