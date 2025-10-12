@@ -36,6 +36,7 @@ type TextStyleType = "plain" | "subtitle" | "speech";
 
 function Write() {
   const [title, setTitle] = useState("");
+  const [image, setImage] = useState<string | null>(null);
   const [overlayText, setOverlayText] = useState("");
   const [textStyle, setTextStyle] = useState<TextStyleType>("plain");
   const photoCardRef = useRef<HTMLDivElement>(null);
@@ -51,7 +52,18 @@ function Write() {
     setOverlayText(e.target.value);
   };
 
+  const validateInputs = () => {
+    if (!title.trim()) {
+      alert("제목을 입력해주세요.");
+    }
+    if (!image) {
+      alert("이미지를 업로드주세요.");
+    }
+    return true;
+  };
+
   const handleSubmit = async () => {
+    if (!validateInputs()) return;
     if (!photoCardRef.current) return;
 
     const canvas = await html2canvas(photoCardRef.current, {
@@ -61,15 +73,17 @@ function Write() {
 
     const dataUrl = canvas.toDataURL("image/png");
     setCapturedImage(dataUrl);
-   // console.log(dataUrl);
+    // console.log(dataUrl);
 
     localStorage.setItem("latestImage", dataUrl);
-  }; 
+  };
 
   return (
     <MainContainer>
       <div>
         <PhotoCard
+          image={image}
+          setImage={setImage}
           overlayText={overlayText}
           textStyle={textStyle}
           ref={photoCardRef}
