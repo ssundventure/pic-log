@@ -2,6 +2,7 @@ import { useRef, useState } from "react";
 import PhotoCard from "../components/PhotoCard";
 import styled from "styled-components";
 import html2canvas from "html2canvas";
+import { toast } from "sonner";
 
 const MainContainer = styled.div`
   display: flex;
@@ -54,12 +55,12 @@ function Write() {
 
   const validateInputs = () => {
     if (!title.trim()) {
-      alert("제목을 입력해주세요.");
-      return false
+      toast.error("제목을 입력해주세요.");
+      return false;
     }
     if (!image) {
-      alert("이미지를 업로드주세요.");
-      return false
+      toast.error("이미지를 업로드해주세요.");
+      return false;
     }
     return true;
   };
@@ -68,15 +69,20 @@ function Write() {
     if (!validateInputs()) return;
     if (!photoCardRef.current) return;
 
-    const canvas = await html2canvas(photoCardRef.current, {
-      useCORS: true,
-      backgroundColor: null,
-    });
+    try {
+      const canvas = await html2canvas(photoCardRef.current, {
+        useCORS: true,
+        backgroundColor: null,
+      });
 
-    const dataUrl = canvas.toDataURL("image/png");
-    setCapturedImage(dataUrl);
-
-    localStorage.setItem("latestImage", dataUrl);
+      const dataUrl = canvas.toDataURL("image/png");
+      setCapturedImage(dataUrl);
+      localStorage.setItem("latestImage", dataUrl);
+      toast.success("저장되었습니다.");
+    } catch (error) {
+      console.error("이미지 캡쳐 중 오류 발생:", error);
+      toast.error("저장에 실패하였습니다.");
+    }
   };
 
   return (
@@ -91,7 +97,6 @@ function Write() {
         />
         <p>사진을 업로드하고 글을 작성해보세요!</p>
       </div>
-
       <WriteContainer>
         <div>
           <Label htmlFor="title">Title</Label>
