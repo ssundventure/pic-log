@@ -6,6 +6,7 @@ import Write from "./pages/Write";
 import styled from "styled-components";
 import { SIDEBAR_WIDTH } from "./constants/layout";
 import SideBar from "./components/SideBar";
+import { Toaster } from "sonner";
 
 const MainContent = styled.div`
   padding: 7rem;
@@ -25,6 +26,7 @@ function App() {
           </Routes>
         </MainContent>
       </BrowserRouter>
+      <Toaster richColors position="top-center" duration={2000} />
     </>
   );
 }
