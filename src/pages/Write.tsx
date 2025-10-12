@@ -55,9 +55,11 @@ function Write() {
   const validateInputs = () => {
     if (!title.trim()) {
       alert("제목을 입력해주세요.");
+      return false
     }
     if (!image) {
       alert("이미지를 업로드주세요.");
+      return false
     }
     return true;
   };
@@ -73,7 +75,6 @@ function Write() {
 
     const dataUrl = canvas.toDataURL("image/png");
     setCapturedImage(dataUrl);
-    // console.log(dataUrl);
 
     localStorage.setItem("latestImage", dataUrl);
   };
