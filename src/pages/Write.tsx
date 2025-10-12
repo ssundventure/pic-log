@@ -61,8 +61,10 @@ function Write() {
 
     const dataUrl = canvas.toDataURL("image/png");
     setCapturedImage(dataUrl);
-    console.log(dataUrl);
-  };
+   // console.log(dataUrl);
+
+    localStorage.setItem("latestImage", dataUrl);
+  }; 
 
   return (
     <MainContainer>
@@ -141,16 +143,6 @@ function Write() {
           저장
         </button>
       </WriteContainer>
-      {capturedImage && (
-        <div>
-          <h3>📸 캡처된 이미지 미리보기</h3>
-          <img
-            src={capturedImage}
-            alt="캡처 결과"
-            style={{ maxWidth: "100%", border: "1px solid #ccc" }}
-          />
-        </div>
-      )}
     </MainContainer>
   );
 }
