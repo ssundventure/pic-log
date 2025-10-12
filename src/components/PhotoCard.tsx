@@ -112,14 +112,14 @@ const Input = styled.input`
 `;
 
 interface PhotoCardProps {
+  image: string | null;
+  setImage: (img: string | null) => void;
   overlayText: string;
   textStyle: string;
 }
 
 const PhotoCard = forwardRef<HTMLDivElement, PhotoCardProps>(
-  ({ overlayText, textStyle }, ref) => {
-    const [image, setImage] = useState<string>("");
-
+  ({ image, setImage, overlayText, textStyle }, ref) => {
     const readImageFile = (file: File) => {
       if (!file) return;
       if (!file.type.startsWith("image/")) {
