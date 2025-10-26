@@ -11,8 +11,8 @@ const Sidebar = styled.nav`
   min-height: 100vh;
   gap: 2.5rem;
   padding: 2.5rem 1.2rem 2rem 1.2rem;
-  background: #fff;
-  border-right: 1px solid #e5e7eb;
+  background: #000;
+  border-right: 1px solid #1f1d1b;
   box-shadow: none;
   border-radius: 0;
 `;
@@ -21,7 +21,7 @@ const SidebarItem = styled.span`
   display: flex;
   align-items: center;
   gap: 0.6rem;
-  color: #222;
+  color: #5e5d5d;
   font-size: 1.08rem;
   padding: 0.5rem 0.7rem;
   border-radius: 0.5rem;
@@ -29,7 +29,7 @@ const SidebarItem = styled.span`
   transition: background 0.15s, color 0.15s;
   svg {
     flex-shrink: 0;
-    color: #bfc7a1;
+    color: #f6d89e;
     background: none;
     border-radius: 0;
     padding: 0;
@@ -42,10 +42,10 @@ const SidebarItem = styled.span`
     letter-spacing: 0.01em;
   }
   &:hover {
-    background: #f5f7e6;
-    color: #7a8450;
+    background: #1f1d1b;
+    color: #f6d89e;
     a {
-      color: #7a8450;
+      color: #f6d89e;
       text-decoration: none;
     }
   }
@@ -56,7 +56,7 @@ const MainLogo = styled.span`
   align-items: center;
   font-size: 1.5rem;
   font-weight: 600;
-  color: #7a8450;
+  color: #f6d89e;
   margin-bottom: 2.2rem;
   letter-spacing: 0.01em;
   gap: 0.5rem;
