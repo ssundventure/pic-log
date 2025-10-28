@@ -4,35 +4,6 @@ import styled from "styled-components";
 import html2canvas from "html2canvas";
 import { toast } from "sonner";
 
-const MainContainer = styled.div`
-  display: flex;
-`;
-
-const WriteContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-`;
-
-const Input = styled.input`
-  padding: 1rem;
-  width: 100%;
-  height: 3rem;
-  border-radius: 10px;
-`;
-
-const TextArea = styled.textarea`
-  padding: 1rem;
-  width: 100%;
-  height: 7rem;
-  border-radius: 10px;
-`;
-
-const Label = styled.label`
-  display: block;
-  margin-bottom: 1rem;
-`;
-
 type TextStyleType = "plain" | "subtitle" | "speech";
 
 function Write() {
@@ -40,18 +11,9 @@ function Write() {
   const [image, setImage] = useState<string | null>(null);
   const [overlayText, setOverlayText] = useState("");
   const [textStyle, setTextStyle] = useState<TextStyleType>("plain");
+  const [description, setDescription] = useState("");
   const photoCardRef = useRef<HTMLDivElement>(null);
   const [capturedImage, setCapturedImage] = useState<string | null>(null);
-
-  const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    e.preventDefault();
-    setTitle(e.target.value);
-  };
-
-  const handleOverlayTextChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    e.preventDefault();
-    setOverlayText(e.target.value);
-  };
 
   const validateInputs = () => {
     if (!title.trim()) {
@@ -103,7 +65,7 @@ function Write() {
           <Input
             type="text"
             value={title}
-            onChange={handleTitleChange}
+            onChange={(e) => setOverlayText(e.target.value)}
             placeholder="제목을 입력하세요"
           />
         </div>
@@ -112,7 +74,7 @@ function Write() {
           <Input
             type="text"
             value={overlayText}
-            onChange={handleOverlayTextChange}
+            onChange={(e) => setTitle(e.target.value)}
             placeholder="사진에 쓸 텍스트를 입력하세요."
           />
         </div>
@@ -157,6 +119,8 @@ function Write() {
             placeholder="여기에 글을 작성하세요..."
             rows={10}
             cols={50}
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
           ></TextArea>
         </div>
         <button type="submit" onClick={handleSubmit}>
@@ -166,5 +130,37 @@ function Write() {
     </MainContainer>
   );
 }
+
+/* ---------------- Styled Components ---------------- */
+
+const MainContainer = styled.div`
+  display: flex;
+`;
+
+const WriteContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  color: #f6d89e;
+`;
+
+const Input = styled.input`
+  padding: 1rem;
+  width: 100%;
+  height: 3rem;
+  border-radius: 10px;
+`;
+
+const TextArea = styled.textarea`
+  padding: 1rem;
+  width: 100%;
+  height: 7rem;
+  border-radius: 10px;
+`;
+
+const Label = styled.label`
+  display: block;
+  margin-bottom: 1rem;
+`;
 
 export default Write;
