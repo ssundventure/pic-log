@@ -15,6 +15,7 @@ function Write() {
   const [description, setDescription] = useState("");
   const photoCardRef = useRef<HTMLDivElement>(null);
   const [capturedImage, setCapturedImage] = useState<string | null>(null);
+  const [isSaving, setIsSaving] = useState<boolean>(false);
 
   const validateInputs = () => {
     if (!title.trim()) {
@@ -69,24 +70,32 @@ function Write() {
   };
 
   const handleSubmit = async () => {
+    if (isSaving) return;
     if (!validateInputs()) return;
     if (!photoCardRef.current) return;
 
-    let imageDataUrl: string | null = null;
+    setIsSaving(true);
+
     try {
-      imageDataUrl = await captureImage();
+      const imageDataUrl = await captureImage();
+      if (!imageDataUrl) {
+        console.error("이미지 캡쳐에 실패했습니다.");
+        return;
+      }
+      try {
+        await saveToIndexedDB(imageDataUrl);
+        toast.success("저장되었습니다.");
+        resetForm();
+      } catch (error) {
+        console.error("로컬스토리지 저장 중 오류:", error);
+        toast.error("저장에 실패하였습니다.");
+      }
     } catch (error) {
       console.error("이미지 캡쳐 중 오류 발생:", error);
       toast.error("이미지 저장에 실패하였습니다.");
+    } finally {
+      setIsSaving(false);
     }
-    try {
-      await saveToIndexedDB(imageDataUrl);
-    } catch (error) {
-      console.error("로컬스토리지 저장 중 오류:", error);
-    }
-
-    toast.success("저장되었습니다.");
-    resetForm();
   };
 
   return (
@@ -165,8 +174,8 @@ function Write() {
             onChange={(e) => setDescription(e.target.value)}
           ></TextArea>
         </div>
-        <SaveBtn type="submit" onClick={handleSubmit}>
-          저장
+        <SaveBtn type="submit" onClick={handleSubmit} disabled={isSaving}>
+          {isSaving ? "저장 중" : "저장"}
         </SaveBtn>
       </WriteContainer>
     </MainContainer>
@@ -205,12 +214,14 @@ const Label = styled.label`
   margin-bottom: 1rem;
 `;
 
-const SaveBtn = styled.button`
+const SaveBtn = styled.button<{ disabled?: boolean }>`
   background-color: #f6d89e;
   padding: 1rem;
   width: 100%;
   height: 3rem;
   border-radius: 10px;
+  opacity: ${({ disabled }) => (disabled ? 0.6 : 1)};
+  cursor: ${({ disabled }) => (disabled ? "not-allowed" : "pointer")};
 
   &:hover {
     filter: brightness(1.1);
