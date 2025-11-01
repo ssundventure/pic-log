@@ -3,35 +3,7 @@ import PhotoCard from "../components/PhotoCard";
 import styled from "styled-components";
 import html2canvas from "html2canvas";
 import { toast } from "sonner";
-
-const MainContainer = styled.div`
-  display: flex;
-`;
-
-const WriteContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-`;
-
-const Input = styled.input`
-  padding: 1rem;
-  width: 100%;
-  height: 3rem;
-  border-radius: 10px;
-`;
-
-const TextArea = styled.textarea`
-  padding: 1rem;
-  width: 100%;
-  height: 7rem;
-  border-radius: 10px;
-`;
-
-const Label = styled.label`
-  display: block;
-  margin-bottom: 1rem;
-`;
+import localforage from "localforage";
 
 type TextStyleType = "plain" | "subtitle" | "speech";
 
@@ -40,18 +12,9 @@ function Write() {
   const [image, setImage] = useState<string | null>(null);
   const [overlayText, setOverlayText] = useState("");
   const [textStyle, setTextStyle] = useState<TextStyleType>("plain");
+  const [description, setDescription] = useState("");
   const photoCardRef = useRef<HTMLDivElement>(null);
   const [capturedImage, setCapturedImage] = useState<string | null>(null);
-
-  const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    e.preventDefault();
-    setTitle(e.target.value);
-  };
-
-  const handleOverlayTextChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    e.preventDefault();
-    setOverlayText(e.target.value);
-  };
 
   const validateInputs = () => {
     if (!title.trim()) {
@@ -65,24 +28,66 @@ function Write() {
     return true;
   };
 
+  const captureImage = async () => {
+    if (!photoCardRef.current) return null;
+    const canvas = await html2canvas(photoCardRef.current, {
+      useCORS: true,
+      backgroundColor: null,
+      scale: 0.8,
+    });
+
+    const dataUrl = canvas.toDataURL("image/png");
+    setCapturedImage(dataUrl);
+    return dataUrl;
+  };
+
+  const saveToIndexedDB = async (imageUrl: string | null) => {
+    if (!imageUrl) throw new Error("imageUrl이 비어 있습니다."); // ✅ 안전장치
+
+    const existing = (await localforage.getItem("piclog_posts")) || "[]";
+
+    const newPost = {
+      id: Date.now(),
+      title: title,
+      image: imageUrl,
+      description: description,
+      createdAt: new Date().toISOString(),
+    };
+    const updated = Array.isArray(existing)
+      ? [...existing, newPost]
+      : [newPost];
+    await localforage.setItem("piclog_posts", updated);
+  };
+
+  const resetForm = () => {
+    setTitle("");
+    setImage(null);
+    setOverlayText("");
+    setTextStyle("plain");
+    setDescription("");
+    setCapturedImage(null);
+  };
+
   const handleSubmit = async () => {
     if (!validateInputs()) return;
     if (!photoCardRef.current) return;
 
+    let imageDataUrl: string | null = null;
     try {
-      const canvas = await html2canvas(photoCardRef.current, {
-        useCORS: true,
-        backgroundColor: null,
-      });
-
-      const dataUrl = canvas.toDataURL("image/png");
-      setCapturedImage(dataUrl);
-      localStorage.setItem("latestImage", dataUrl);
-      toast.success("저장되었습니다.");
+      imageDataUrl = await captureImage();
     } catch (error) {
       console.error("이미지 캡쳐 중 오류 발생:", error);
-      toast.error("저장에 실패하였습니다.");
+      toast.error("이미지 저장에 실패하였습니다.");
     }
+    console.log("imageDataUrl 확인 " + imageDataUrl);
+    try {
+      await saveToIndexedDB(imageDataUrl);
+    } catch (error) {
+      console.error("로컬스토리지 저장 중 오류:", error);
+    }
+
+    toast.success("저장되었습니다.");
+    resetForm();
   };
 
   return (
@@ -103,7 +108,7 @@ function Write() {
           <Input
             type="text"
             value={title}
-            onChange={handleTitleChange}
+            onChange={(e) => setTitle(e.target.value)}
             placeholder="제목을 입력하세요"
           />
         </div>
@@ -112,7 +117,7 @@ function Write() {
           <Input
             type="text"
             value={overlayText}
-            onChange={handleOverlayTextChange}
+            onChange={(e) => setOverlayText(e.target.value)}
             placeholder="사진에 쓸 텍스트를 입력하세요."
           />
         </div>
@@ -157,6 +162,8 @@ function Write() {
             placeholder="여기에 글을 작성하세요..."
             rows={10}
             cols={50}
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
           ></TextArea>
         </div>
         <button type="submit" onClick={handleSubmit}>
@@ -166,5 +173,37 @@ function Write() {
     </MainContainer>
   );
 }
+
+/* ---------------- Styled Components ---------------- */
+
+const MainContainer = styled.div`
+  display: flex;
+`;
+
+const WriteContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  color: #f6d89e;
+`;
+
+const Input = styled.input`
+  padding: 1rem;
+  width: 100%;
+  height: 3rem;
+  border-radius: 10px;
+`;
+
+const TextArea = styled.textarea`
+  padding: 1rem;
+  width: 100%;
+  height: 7rem;
+  border-radius: 10px;
+`;
+
+const Label = styled.label`
+  display: block;
+  margin-bottom: 1rem;
+`;
 
 export default Write;

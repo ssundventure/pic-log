@@ -7,6 +7,12 @@ import styled from "styled-components";
 import { SIDEBAR_WIDTH } from "./constants/layout";
 import SideBar from "./components/SideBar";
 import { Toaster } from "sonner";
+import localforage from "localforage";
+
+localforage.config({
+  name: "PicLog",
+  storeName: "piclog_posts",
+});
 
 const MainContent = styled.div`
   padding: 7rem;
