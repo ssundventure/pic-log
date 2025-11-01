@@ -79,7 +79,6 @@ function Write() {
       console.error("이미지 캡쳐 중 오류 발생:", error);
       toast.error("이미지 저장에 실패하였습니다.");
     }
-    console.log("imageDataUrl 확인 " + imageDataUrl);
     try {
       await saveToIndexedDB(imageDataUrl);
     } catch (error) {
@@ -166,9 +165,9 @@ function Write() {
             onChange={(e) => setDescription(e.target.value)}
           ></TextArea>
         </div>
-        <button type="submit" onClick={handleSubmit}>
+        <SaveBtn type="submit" onClick={handleSubmit}>
           저장
-        </button>
+        </SaveBtn>
       </WriteContainer>
     </MainContainer>
   );
@@ -204,6 +203,20 @@ const TextArea = styled.textarea`
 const Label = styled.label`
   display: block;
   margin-bottom: 1rem;
+`;
+
+const SaveBtn = styled.button`
+  background-color: #f6d89e;
+  padding: 1rem;
+  width: 100%;
+  height: 3rem;
+  border-radius: 10px;
+
+  &:hover {
+    filter: brightness(1.1);
+  }
+
+  transition: all 0.12s ease-in;
 `;
 
 export default Write;
