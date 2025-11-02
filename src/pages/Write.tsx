@@ -4,6 +4,7 @@ import styled from "styled-components";
 import html2canvas from "html2canvas";
 import { toast } from "sonner";
 import localforage from "localforage";
+import { useNavigate } from "react-router-dom";
 
 type TextStyleType = "plain" | "subtitle" | "speech";
 
@@ -16,6 +17,7 @@ function Write() {
   const photoCardRef = useRef<HTMLDivElement>(null);
   const [capturedImage, setCapturedImage] = useState<string | null>(null);
   const [isSaving, setIsSaving] = useState<boolean>(false);
+  const navigate = useNavigate();
 
   const validateInputs = () => {
     if (!title.trim()) {
@@ -43,7 +45,7 @@ function Write() {
   };
 
   const saveToIndexedDB = async (imageUrl: string | null) => {
-    if (!imageUrl) throw new Error("imageUrl이 비어 있습니다."); // ✅ 안전장치
+    if (!imageUrl) throw new Error("imageUrl이 비어 있습니다.");
 
     const existing = (await localforage.getItem("piclog_posts")) || "[]";
 
@@ -86,6 +88,7 @@ function Write() {
         await saveToIndexedDB(imageDataUrl);
         toast.success("저장되었습니다.");
         resetForm();
+        setTimeout(() => navigate("/"), 500);
       } catch (error) {
         console.error("로컬스토리지 저장 중 오류:", error);
         toast.error("저장에 실패하였습니다.");

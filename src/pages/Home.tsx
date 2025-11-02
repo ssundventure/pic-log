@@ -18,7 +18,6 @@ function Home() {
     const fetchPosts = async () => {
       const stored = await localforage.getItem<Post[]>("piclog_posts");
       if (stored && Array.isArray(stored)) {
-        // ✅ createdAt 기준 최신순 정렬
         const sorted = [...stored].sort(
           (a, b) =>
             new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
