@@ -5,6 +5,7 @@ import html2canvas from "html2canvas";
 import { toast } from "sonner";
 import localforage from "localforage";
 import { useNavigate } from "react-router-dom";
+import { Post } from "../types/post";
 
 type TextStyleType = "plain" | "subtitle" | "speech";
 
@@ -49,7 +50,7 @@ function Write() {
 
     const existing = (await localforage.getItem("piclog_posts")) || "[]";
 
-    const newPost = {
+    const newPost: Post = {
       id: Date.now(),
       title: title,
       image: imageUrl,
