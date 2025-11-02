@@ -4,6 +4,7 @@ import styled from "styled-components";
 import html2canvas from "html2canvas";
 import { toast } from "sonner";
 import localforage from "localforage";
+import { useNavigate } from "react-router-dom";
 
 type TextStyleType = "plain" | "subtitle" | "speech";
 
@@ -15,6 +16,8 @@ function Write() {
   const [description, setDescription] = useState("");
   const photoCardRef = useRef<HTMLDivElement>(null);
   const [capturedImage, setCapturedImage] = useState<string | null>(null);
+  const [isSaving, setIsSaving] = useState<boolean>(false);
+  const navigate = useNavigate();
 
   const validateInputs = () => {
     if (!title.trim()) {
@@ -42,7 +45,7 @@ function Write() {
   };
 
   const saveToIndexedDB = async (imageUrl: string | null) => {
-    if (!imageUrl) throw new Error("imageUrl이 비어 있습니다."); // ✅ 안전장치
+    if (!imageUrl) throw new Error("imageUrl이 비어 있습니다.");
 
     const existing = (await localforage.getItem("piclog_posts")) || "[]";
 
@@ -69,25 +72,33 @@ function Write() {
   };
 
   const handleSubmit = async () => {
+    if (isSaving) return;
     if (!validateInputs()) return;
     if (!photoCardRef.current) return;
 
-    let imageDataUrl: string | null = null;
+    setIsSaving(true);
+
     try {
-      imageDataUrl = await captureImage();
+      const imageDataUrl = await captureImage();
+      if (!imageDataUrl) {
+        console.error("이미지 캡쳐에 실패했습니다.");
+        return;
+      }
+      try {
+        await saveToIndexedDB(imageDataUrl);
+        toast.success("저장되었습니다.");
+        resetForm();
+        setTimeout(() => navigate("/"), 500);
+      } catch (error) {
+        console.error("로컬스토리지 저장 중 오류:", error);
+        toast.error("저장에 실패하였습니다.");
+      }
     } catch (error) {
       console.error("이미지 캡쳐 중 오류 발생:", error);
       toast.error("이미지 저장에 실패하였습니다.");
+    } finally {
+      setIsSaving(false);
     }
-    console.log("imageDataUrl 확인 " + imageDataUrl);
-    try {
-      await saveToIndexedDB(imageDataUrl);
-    } catch (error) {
-      console.error("로컬스토리지 저장 중 오류:", error);
-    }
-
-    toast.success("저장되었습니다.");
-    resetForm();
   };
 
   return (
@@ -166,9 +177,9 @@ function Write() {
             onChange={(e) => setDescription(e.target.value)}
           ></TextArea>
         </div>
-        <button type="submit" onClick={handleSubmit}>
-          저장
-        </button>
+        <SaveBtn type="submit" onClick={handleSubmit} disabled={isSaving}>
+          {isSaving ? "저장 중" : "저장"}
+        </SaveBtn>
       </WriteContainer>
     </MainContainer>
   );
@@ -204,6 +215,22 @@ const TextArea = styled.textarea`
 const Label = styled.label`
   display: block;
   margin-bottom: 1rem;
+`;
+
+const SaveBtn = styled.button<{ disabled?: boolean }>`
+  background-color: #f6d89e;
+  padding: 1rem;
+  width: 100%;
+  height: 3rem;
+  border-radius: 10px;
+  opacity: ${({ disabled }) => (disabled ? 0.6 : 1)};
+  cursor: ${({ disabled }) => (disabled ? "not-allowed" : "pointer")};
+
+  &:hover {
+    filter: brightness(1.1);
+  }
+
+  transition: all 0.12s ease-in;
 `;
 
 export default Write;
