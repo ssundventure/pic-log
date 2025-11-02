@@ -5,14 +5,14 @@ import html2canvas from "html2canvas";
 import { toast } from "sonner";
 import localforage from "localforage";
 import { useNavigate } from "react-router-dom";
-
-type TextStyleType = "plain" | "subtitle" | "speech";
+import { Post } from "../types/post";
+import { OverlayType } from "../types/overlayType";
 
 function Write() {
   const [title, setTitle] = useState("");
   const [image, setImage] = useState<string | null>(null);
   const [overlayText, setOverlayText] = useState("");
-  const [textStyle, setTextStyle] = useState<TextStyleType>("plain");
+  const [overlayStyle, setOverlayStyle] = useState<OverlayType>("plain");
   const [description, setDescription] = useState("");
   const photoCardRef = useRef<HTMLDivElement>(null);
   const [capturedImage, setCapturedImage] = useState<string | null>(null);
@@ -49,7 +49,7 @@ function Write() {
 
     const existing = (await localforage.getItem("piclog_posts")) || "[]";
 
-    const newPost = {
+    const newPost: Post = {
       id: Date.now(),
       title: title,
       image: imageUrl,
@@ -66,7 +66,7 @@ function Write() {
     setTitle("");
     setImage(null);
     setOverlayText("");
-    setTextStyle("plain");
+    setOverlayStyle("plain");
     setDescription("");
     setCapturedImage(null);
   };
@@ -101,6 +101,10 @@ function Write() {
     }
   };
 
+  const handleOverlayStyleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setOverlayStyle(e.target.value as OverlayType);
+  };
+
   return (
     <MainContainer>
       <div>
@@ -108,7 +112,7 @@ function Write() {
           image={image}
           setImage={setImage}
           overlayText={overlayText}
-          textStyle={textStyle}
+          overlayStyle={overlayStyle}
           ref={photoCardRef}
         />
         <p>사진을 업로드하고 글을 작성해보세요!</p>
@@ -134,43 +138,31 @@ function Write() {
         </div>
         <div>
           <Label htmlFor="">Select Style</Label>
-          <fieldset>
-            <div>
-              <input
+          {[
+            { value: "plain", label: "기본" },
+            { value: "subtitle", label: "자막" },
+            { value: "speech", label: "말풍선" },
+            { value: "none", label: "없음" },
+          ].map((option) => (
+            <RadioLabel
+              key={option.value}
+              $checked={overlayStyle === option.value}
+            >
+              <Input
                 type="radio"
-                name="textStyle"
-                value="plain"
-                checked={textStyle === "plain"}
-                onChange={(e) => setTextStyle(e.target.value as TextStyleType)}
+                name="overlayStyle"
+                value={option.value}
+                checked={overlayStyle === option.value}
+                onChange={handleOverlayStyleChange}
               />
-              <label htmlFor="plain">기본</label>
-            </div>
-            <div>
-              <input
-                type="radio"
-                name="textStyle"
-                value="subtitle"
-                checked={textStyle === "subtitle"}
-                onChange={(e) => setTextStyle(e.target.value as TextStyleType)}
-              />
-              <label htmlFor="subtitle">자막</label>
-            </div>
-            <div>
-              <input
-                type="radio"
-                name="textStyle"
-                value="speech"
-                checked={textStyle === "speech"}
-                onChange={(e) => setTextStyle(e.target.value as TextStyleType)}
-              />
-              <label htmlFor="speech">말풍선</label>
-            </div>
-          </fieldset>
+              {option.label}
+            </RadioLabel>
+          ))}
         </div>
         <div>
           <Label>Description</Label>
           <TextArea
-            placeholder="여기에 글을 작성하세요..."
+            placeholder="여기에 설명글을 작성하세요..."
             rows={10}
             cols={50}
             value={description}
@@ -203,6 +195,29 @@ const Input = styled.input`
   width: 100%;
   height: 3rem;
   border-radius: 10px;
+`;
+
+const RadioLabel = styled.label<{ $checked: boolean }>`
+  font-size: 15px;
+  display: inline-block;
+  padding: 0.4rem 1rem;
+  margin-right: 1rem;
+  border-radius: 20px;
+  border: 2px solid #f6d89e;
+  color: ${({ $checked }) => ($checked ? "#222" : "#f6d89e")};
+  background-color: ${({ $checked }) => ($checked ? "#f6d89e" : "transparent")};
+  font-weight: 400;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+
+  input {
+    display: none;
+  }
+
+  &:hover {
+    transform: scale(1.05);
+    filter: brightness(1.1);
+  }
 `;
 
 const TextArea = styled.textarea`

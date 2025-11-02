@@ -2,14 +2,8 @@ import { useEffect, useState } from "react";
 import styled from "styled-components";
 import FilmColumn from "../components/FilmColumn";
 import localforage from "localforage";
+import { Post } from "../types/post";
 
-interface Post {
-  id: number;
-  title: string;
-  image: string;
-  description: string;
-  createdAt: string;
-}
 
 function Home() {
   const [posts, setPosts] = useState<Post[]>([]);
