@@ -8,7 +8,11 @@ function FilmFrame({ img }: FilmFrameProps) {
   return (
     <Frame>
       <FilmImage src={img} />
-      <FilmText> PIC-LOG 2025 F01 </FilmText>
+      <FilmText>
+        <div>► PICLOG • FRAME 00</div>
+        <div>► 00</div>
+      </FilmText>
+      <Date>2025/11/15</Date>
     </Frame>
   );
 }
@@ -18,11 +22,12 @@ function FilmFrame({ img }: FilmFrameProps) {
 const Frame = styled.div`
   position: relative;
   background-color: #111;
-  padding: 12px;
+  padding: 12px 12px 12px 12px;
+
   border: 8px solid #111;
-  border-radius: 6px;
-  width: 540px;
-  height: 720px;
+  border-radius: 0;
+  width: 375px;
+  height: 574px;
   box-shadow: 0 6px 14px rgba(0, 0, 0, 0.7);
   overflow: hidden;
 
@@ -38,18 +43,35 @@ const FilmImage = styled.img`
   width: 100%;
   height: 100%;
   object-fit: cover;
+  border-radius: 0;
   transition: all 0.12s ease-in;
 `;
 
-const FilmText = styled.span`
+const FilmText = styled.div`
   position: absolute;
+  width: 100%;
   right: 8px;
-  top: 50%;
-  transform: translateY(-50%) rotate(90deg);
+  top: 32%;
+  transform: translateY(-50%) rotate(270deg);
   transform-origin: right center;
+  display: flex;
+  justify-content: space-around;
   font-size: 0.7rem;
   color: #f6d89e;
-  font-family: "Courier New", monospace;
+  font-family: "OCR-A", monospace;
+  letter-spacing: 1px;
+  opacity: 0.9;
+`;
+
+const Date = styled.span`
+  position: absolute;
+  left: 8px;
+  top: 24%;
+  transform: translateY(-50%) rotate(270deg);
+  transform-origin: left center;
+  font-size: 0.7rem;
+  color: #f6d89e;
+  font-family: "OCR-A", monospace;
   letter-spacing: 1px;
   opacity: 0.9;
 `;

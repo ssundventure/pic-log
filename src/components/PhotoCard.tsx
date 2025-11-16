@@ -100,7 +100,7 @@ const ImageDropArea = styled.div<{ $bg?: string }>`
   width: 375px;
   height: 574px;
   margin-right: 3rem;
-  border-radius: 25px;
+  //border-radius: 25px;
   padding: 10rem 0;
   background-color: #ccc;
 
