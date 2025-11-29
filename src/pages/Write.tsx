@@ -7,6 +7,7 @@ import localforage from "localforage";
 import { useNavigate } from "react-router-dom";
 import { Post } from "../types/post";
 import { OverlayType } from "../types/overlayType";
+import { SIDEBAR_WIDTH } from "../constants/layout";
 
 function Write() {
   const [title, setTitle] = useState("");
@@ -181,6 +182,8 @@ function Write() {
 
 const MainContainer = styled.div`
   display: flex;
+  margin-left: ${SIDEBAR_WIDTH};
+  
 `;
 
 const WriteContainer = styled.div`
