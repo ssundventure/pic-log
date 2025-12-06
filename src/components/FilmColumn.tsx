@@ -1,16 +1,17 @@
 import styled from "styled-components";
 import FilmFrame from "./FilmFrame";
+import { Post } from "../types/Post";
 
 interface FilmColumnProps {
-  photos: string[];
+  posts: Post[];
   align: "left" | "right";
 }
 
-function FilmColumn({ photos, align }: FilmColumnProps) {
+function FilmColumn({ posts, align }: FilmColumnProps) {
   return (
     <Column left={align === "left"} right={align === "right"}>
-      {photos.map((img, i) => (
-        <FilmFrame key={i} img={img} />
+      {posts.map((post, i) => (
+        <FilmFrame key={i} id={post.id} img={post.image} />
       ))}
     </Column>
   );
