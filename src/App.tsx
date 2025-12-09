@@ -9,6 +9,7 @@ import SideBar from "./components/SideBar";
 import { Toaster } from "sonner";
 import localforage from "localforage";
 import MainHeader from "./components/MainHeader";
+import PostDetail from "./pages/PostDetail";
 
 localforage.config({
   name: "PicLog",
@@ -18,6 +19,7 @@ localforage.config({
 const MainContent = styled.div`
   padding: 3rem 6rem 6rem;
   margin-left: ${SIDEBAR_WIDTH};
+  width: auto;
 `;
 
 function App() {
@@ -31,6 +33,7 @@ function App() {
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/write" element={<Write />} />
+            <Route path="/posts/:id" element={<PostDetail />} />
           </Routes>
         </MainContent>
       </BrowserRouter>

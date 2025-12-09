@@ -2,8 +2,7 @@ import { useEffect, useState } from "react";
 import styled from "styled-components";
 import FilmColumn from "../components/FilmColumn";
 import localforage from "localforage";
-import { Post } from "../types/post";
-
+import { Post } from "../types/Post";
 
 function Home() {
   const [posts, setPosts] = useState<Post[]>([]);
@@ -22,14 +21,13 @@ function Home() {
     fetchPosts();
   }, []);
 
-  const photos = posts.map((post) => post.image);
-  const leftPhotos = photos.filter((_, i) => i % 2 === 0);
-  const rightPhotos = photos.filter((_, i) => i % 2 !== 0);
+  const leftPosts = posts.filter((_, i) => i % 2 === 0);
+  const rightPosts = posts.filter((_, i) => i % 2 !== 0);
 
   return (
     <FilmContainer>
-      <FilmColumn align="left" photos={leftPhotos} />
-      <FilmColumn align="right" photos={rightPhotos} />
+      <FilmColumn align="left" posts={leftPosts} />
+      <FilmColumn align="right" posts={rightPosts} />
     </FilmContainer>
   );
 }

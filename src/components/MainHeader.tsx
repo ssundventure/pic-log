@@ -5,12 +5,18 @@ function MainHeader() {
   const { pathname } = useLocation();
 
   const isHome = pathname === "/home" || pathname === "/";
+  const isDetail = pathname.includes("/posts");
+  const isWrite = pathname === "/write";
 
   return (
     <HeaderWrapper>
       <HeaderLeft>
         <HeaderLabel>Capture. Write. Relive.</HeaderLabel>
-        <HeaderTitle>PicLog Timeline</HeaderTitle>
+        <HeaderTitle>
+          PicLog {isHome && "TimeLine"}
+          {isWrite && "Write"}
+          {isDetail && "Detail"}
+        </HeaderTitle>
       </HeaderLeft>
       {isHome && (
         <HeaderRight>

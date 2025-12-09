@@ -5,8 +5,8 @@ import html2canvas from "html2canvas";
 import { toast } from "sonner";
 import localforage from "localforage";
 import { useNavigate } from "react-router-dom";
-import { Post } from "../types/post";
-import { OverlayType } from "../types/overlayType";
+import { Post } from "../types/Post";
+import { OverlayType } from "../types/OverlayType";
 import { SIDEBAR_WIDTH } from "../constants/layout";
 
 function Write() {
@@ -183,7 +183,7 @@ function Write() {
 const MainContainer = styled.div`
   display: flex;
   margin-left: ${SIDEBAR_WIDTH};
-  
+  width: auto;
 `;
 
 const WriteContainer = styled.div`

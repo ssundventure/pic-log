@@ -1,12 +1,19 @@
 import styled from "styled-components";
+import { useNavigate } from "react-router-dom";
 
 interface FilmFrameProps {
   img: string;
+  id: number;
 }
 
-function FilmFrame({ img }: FilmFrameProps) {
+function FilmFrame({ img, id }: FilmFrameProps) {
+  const navigate = useNavigate();
+
+  const handleClickPost = (postId: number) => {
+    navigate(`/posts/${postId}`);
+  };
   return (
-    <Frame>
+    <Frame onClick={() => handleClickPost(id)}>
       <FilmImage src={img} />
       <FilmText>
         <div>► PICLOG • FRAME 00</div>
@@ -34,6 +41,7 @@ const Frame = styled.div`
   &:hover img {
     transform: scale(1.04);
     filter: brightness(1.1);
+    cursor: pointer;
   }
 
   transition: all 0.12s ease-in;
