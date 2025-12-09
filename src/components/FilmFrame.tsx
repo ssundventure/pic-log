@@ -41,6 +41,7 @@ const Frame = styled.div`
   &:hover img {
     transform: scale(1.04);
     filter: brightness(1.1);
+    cursor: pointer;
   }
 
   transition: all 0.12s ease-in;
