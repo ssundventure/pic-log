@@ -3,6 +3,7 @@ import styled from "styled-components";
 import FilmColumn from "../components/FilmColumn";
 import localforage from "localforage";
 import { Post } from "../types/Post";
+import EmptyState from "../components/EmptyState";
 
 function Home() {
   const [posts, setPosts] = useState<Post[]>([]);
@@ -10,6 +11,7 @@ function Home() {
   useEffect(() => {
     const fetchPosts = async () => {
       const stored = await localforage.getItem<Post[]>("piclog_posts");
+
       if (stored && Array.isArray(stored)) {
         const sorted = [...stored].sort(
           (a, b) =>
@@ -25,10 +27,15 @@ function Home() {
   const rightPosts = posts.filter((_, i) => i % 2 !== 0);
 
   return (
-    <FilmContainer>
-      <FilmColumn align="left" posts={leftPosts} />
-      <FilmColumn align="right" posts={rightPosts} />
-    </FilmContainer>
+    <>
+      {posts.length === 0 && <EmptyState></EmptyState>}
+      {posts.length > 0 && (
+        <FilmContainer>
+          <FilmColumn align="left" posts={leftPosts} />
+          <FilmColumn align="right" posts={rightPosts} />
+        </FilmContainer>
+      )}
+    </>
   );
 }
 
