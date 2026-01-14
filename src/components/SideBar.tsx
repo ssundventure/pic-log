@@ -121,7 +121,10 @@ function SideBar() {
 
 const Sidebar = styled.nav`
   position: fixed;
+  top: 0px;
+  left: 0px;
   width: ${SIDEBAR_WIDTH};
+  height: 100vh;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -264,7 +267,25 @@ const PostList = styled.div`
   flex-direction: column;
   gap: 0.6rem;
   overflow-y: auto;
-  padding-right: 0.2rem;
+  padding: 0.2rem;
+  flex: 1;
+  min-height: 0;
+
+  /* 스크롤바 스타일 (Chrome/Safari) */
+  &::-webkit-scrollbar {
+    width: 6px;
+  }
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  &::-webkit-scrollbar-thumb {
+    background: #2a2724;
+    border-radius: 999px;
+  }
+
+  /* Firefox */
+  scrollbar-width: thin;
+  scrollbar-color: #2a2724 transparent;
 `;
 
 const PostLink = styled(Link)`
@@ -273,6 +294,7 @@ const PostLink = styled(Link)`
 
 const PostItem = styled.div`
   display: flex;
+  margin-right: 1.2rem;
   flex-direction: column;
   gap: 0.2rem;
   padding: 0.65rem 0.7rem;
