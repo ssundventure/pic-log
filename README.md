@@ -1,8 +1,9 @@
-# 📸 PicLog - 나의 추억 보관 SNS
+# 📸 PicLog - 개인 추억 보관 SNS
 
 ** Capture. Write. Relive. **
+사진에 기록을 남기는 개인 아카이브 프로젝트
 
-**PicLog**는 나의 순간들을 사진과 함께 기록하고 피드 형태로 모아볼 수 있는 **나만의 감성 SNS**입니다.  
+**PicLog**는 나의 순간들을 사진과 함께 기록하고 피드 형태로 모아볼 수 있는 SNS 입니다.  
 여행 중의 한 장면, 일상 속의 소소한 순간까지 —  
 사진 위에 텍스트를 덧입혀 나만의 스토리를 만들어갈 수 있습니다.
 
@@ -14,7 +15,7 @@
 | 항목           | 내용                                                                      |
 | -------------- | ------------------------------------------------------------------------- |
 | **프로젝트명** | PicLog                                                                    |
-| **기간**       | 2025.09 ~ 진행 중                                                         |
+| **기간**       | 약 2개월                                                                       |
 | **개발 목적**  | 프론트엔드 포트폴리오용 개인 프로젝트                                     |
 | **기여도**     | 100% (1인 개발)                                                           |
 | **주요 기능**  | 사진 업로드, 오버레이 텍스트, 포스트 저장 및 목록 출력, 무한 스크롤(예정) |
@@ -26,8 +27,8 @@
 ### ⚙️ 프로젝트 구조
 
 - **React + TypeScript 기반 컴포넌트 구조 설계**
-  - 페이지(`Home`, `Write`)와 컴포넌트(`PhotoCard`, `OverlayText`)를 모듈화하여 재사용성을 높임
-  - `types/` 폴더를 분리해 타입 정의를 명확히 관리
+  - 페이지(`Home`, `Write`) 단위로 사용자 흐름을 먼저 설계
+  - 반복되는 UI를 `PhotoList`, `PhotoCard` 등의 컴포넌트로 분리해 관리
 - **상태 관리**
   - 기본적으로 `useState`, `useEffect`로 상태 관리
   - 추후 Recoil 도입 예정 (전역 상태 및 다크모드 전환 관리)
@@ -55,46 +56,66 @@
 
 ### 🧰 개발 환경
 
-| 항목            | 내용                              |
-| --------------- | --------------------------------- |
-| **프레임워크**  | React (CRA 기반)                  |
-| **언어**        | TypeScript                        |
-| **스타일링**    | styled-components                 |
-| **상태 관리**   | useState, useEffect (Recoil 예정) |
-| **스토리지**    | localforage (IndexedDB)           |
-| **이미지 처리** | html2canvas                       |
-| **품질 관리**   | ESLint, Prettier                  |
-| **빌드 도구**   | Create React App                  |
+| 항목            | 내용                    |
+| --------------- | ----------------------- |
+| **프레임워크**  | React (CRA 기반)        |
+| **언어**        | TypeScript              |
+| **스타일링**    | styled-components       |
+| **상태 관리**   | useState, useEffect     |
+| **스토리지**    | localforage (IndexedDB) |
+| **이미지 처리** | html2canvas             |
+| **품질 관리**   | ESLint, Prettier        |
+| **빌드 도구**   | Create React App        |
 
 ---
 
 ### 🧱 폴더 구조
 
 src/
-┣ components/
-┃ ┣ Sidebar/
-┃ ┣ FilmColumn/
-┃ ┗ …
-┣ pages/
-┃ ┣ Home/
-┃ ┗ Write/
-┣ types/
-┃ ┣ post.ts
-┃ ┗ overlayType.ts
-┣ utils/
-┣ App.tsx
-┗ index.tsx
+├─ assets/ # 이미지 등 정적 리소스
+├─ components/ # 재사용 UI 컴포넌트
+│ ├─ EmptyState.tsx
+│ ├─ FilmColumn.tsx
+│ ├─ FilmFrame.tsx
+│ ├─ MainHeader.tsx
+│ ├─ PhotoCard.tsx
+│ ├─ PhotoList.tsx
+│ └─ SideBar.tsx
+├─ constants/
+│ └─ layout.ts # 레이아웃 상수
+├─ docs/
+│ └─ screens/ # README용 화면 캡처 이미지
+├─ hooks/ # 커스텀 훅(추가 확장 포인트)
+├─ pages/ # 라우트(화면) 단위 구성
+├─ styles/
+│ └─ GlobalStyle.ts # 전역 스타일(styled-components)
+├─ types/
+│ ├─ assets.d.ts # 정적 파일 타입 선언(png 등)
+│ ├─ OverlayType.ts # 오버레이 타입 정의
+│ └─ Post.ts # Post 인터페이스 정의
+├─ utils/ # 공통 유틸 함수
+├─ App.tsx
+└─ index.tsx
 
 ---
 
 ### 💡 설계 원칙
 
-- **컴포넌트 단위 개발 (Atomic Design 방향성)**  
-  → 작은 단위(`Button`, `OverlayText`)부터 큰 페이지 단위(`Home`, `Write`)로 확장
-- **유지보수를 위한 타입 분리 및 명시적 관리**  
-  → `interface Post`, `OverlayType` 등 TypeScript 타입을 별도 관리
-- **UI/UX 중심 개발**  
-  → 감성적인 레이아웃, 라운드 테두리, 라디오 버튼 커스텀
+- **Top-down(큰 흐름 → 컴포넌트 분리) 설계**
+  → 먼저 화면 단위(`Home`, `Write`)에서 사용자 흐름을 잡고,  
+  실제로 반복되거나 책임이 명확해지는 시점에 `PhotoList`, `PhotoCard`, `MainHeader`, `SideBar` 등으로 분리했습니다.  
+
+- **명확한 책임 분리와 재사용성**
+  → `PhotoList`는 목록 렌더링, `PhotoCard`는 단일 포스트 표현,  
+  `MainHeader/SideBar`는 레이아웃과 네비게이션 역할처럼 **컴포넌트 책임을 분명하게** 유지했습니다.
+
+- **타입 분리로 유지보수성 확보**
+  → `Post`, `OverlayType`을 `types/`로 분리해 데이터 구조와 UI 옵션을 명확히 했고,  
+  리팩터링(단건 → 다건 저장 구조) 시에도 타입을 기준으로 안정적으로 확장할 수 있게 설계했습니다.
+
+- **UI/UX 중심 구현**
+  → 사진 기반 기록이라는 컨셉에 맞춰 Film 스타일 레이아웃, 라운드 처리, 커스텀 컨트롤 등  
+  “기록하는 경험”이 자연스럽게 느껴지도록 UI 디테일을 우선했습니다.
 
   ***
 
@@ -117,11 +138,20 @@ src/
 
 ---
 
-## 📸 화면 예시 (예정)
+## 📸 화면 예시
 
-| Write 페이지       | Home 페이지        |
-| ------------------ | ------------------ |
-| (이미지 추가 예정) | (이미지 추가 예정) |
+### Home
+
+![Home](./src/docs/screens/home.png)
+
+### Write
+
+![Write empty](./src/docs/screens/write-empty.png)
+![Write preview](./src/docs/screens/write-preview.png)
+
+### Home (after save)
+
+![Home after save](./src/docs/screens/home-after-save.png)
 
 ---
 
@@ -131,4 +161,6 @@ src/
 > 단순히 기능 구현에 그치지 않고, **타입 분리, 상태 관리, 저장 구조, UI 컴포넌트화** 등을 통해  
 > 실제 서비스 수준의 구조를 고민하며 개발 역량을 확장하고 있습니다.
 >
-> 완성 이후에는 배포 및 포트폴리오 웹사이트에 연동할 예정입니다.
+> ⚠️ 본 프로젝트는 포트폴리오용으로,
+> 핵심 기능 구현과 구조 설계에 집중했으며
+> 일부 기능은 확장 가능성을 고려해 설계 단계로 남겨두었습니다.
