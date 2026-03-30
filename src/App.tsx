@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import GlobalStyle from "./styles/GlobalStyle";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Home from "./pages/Home";
@@ -10,6 +10,7 @@ import { Toaster } from "sonner";
 import localforage from "localforage";
 import MainHeader from "./components/MainHeader";
 import PostDetail from "./pages/PostDetail";
+import { SortType } from "./types/SortType";
 
 localforage.config({
   name: "PicLog",
@@ -23,15 +24,17 @@ const MainContent = styled.div`
 `;
 
 function App() {
+  const [sortType, setSortType] = useState<SortType>("newest");
+
   return (
     <>
       <GlobalStyle />
       <BrowserRouter>
         <SideBar />
         <MainContent>
-          <MainHeader />
+          <MainHeader sortType={sortType} setSortType={setSortType} />
           <Routes>
-            <Route path="/" element={<Home />} />
+            <Route path="/" element={<Home sortType={sortType}/>} />
             <Route path="/write" element={<Write />} />
             <Route path="/posts/:id" element={<PostDetail />} />
           </Routes>
