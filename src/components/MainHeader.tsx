@@ -1,8 +1,14 @@
 import { useState } from "react";
 import styled from "styled-components";
 import { useLocation } from "react-router-dom";
+import { SortType } from "../types/SortType";
 
-function MainHeader() {
+interface MainHeaderProps {
+  sortType: SortType;
+  setSortType: (value: SortType) => void;
+}
+
+function MainHeader({ sortType, setSortType }: MainHeaderProps) {
   const { pathname } = useLocation();
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
 
@@ -23,8 +29,18 @@ function MainHeader() {
       {isHome && (
         <HeaderRight>
           <SortGroup>
-            <SortTag $active>Newest</SortTag>
-            <SortTag>Oldest</SortTag>
+            <SortTag
+              $active={sortType === "newest"}
+              onClick={() => setSortType("newest")}
+            >
+              Newest  
+            </SortTag>
+            <SortTag
+              $active={sortType === "oldest"}
+              onClick={() => setSortType("oldest")}
+            >
+              Oldest
+            </SortTag>
           </SortGroup>
           <UserMenu>
             <UserButton
